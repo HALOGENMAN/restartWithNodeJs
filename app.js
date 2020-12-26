@@ -1,9 +1,26 @@
 const app = require("express")();
+const bodyParser = require('body-parser')
+const mongoose = require("mongoose");
 
-app.get('/',(req,res)=>{
-    res.send("hello world")
-});
+MONGOOSE_URI = "mongodb+srv://shayak:159951sm357753@cluster0-fidtq.mongodb.net/restart" ;
 
-app.listen(3000,()=>{
-    console.log("server is working")
+
+app.set("view engine","ejs")
+app.set("views","views")
+
+app.use(bodyParser.urlencoded({extended:false}))
+
+const mainRouter = require("./router/main")
+app.use(mainRouter);
+
+app.get("/",(req,res,next)=>{
+    res.send("<h1>404 Page not found </h1>")
 })
+
+mongoose.connect(MONGOOSE_URI)
+    .then(()=>{
+        console.log("connected");
+        app.listen(5000);
+    })
+    .catch(err=>console.log(err))
+
